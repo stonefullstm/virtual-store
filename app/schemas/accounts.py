@@ -1,11 +1,10 @@
 from pydantic import BaseModel
-from pydantic import EmailStr
 
 
 class AccountSchema(BaseModel):
     id: str
     name: str
-    email: EmailStr
+    email: str
     password: str
     status: bool
 
@@ -13,7 +12,7 @@ class AccountSchema(BaseModel):
 class AccountPublic(BaseModel):
     id: str
     name: str
-    email: EmailStr
+    email: str
     status: bool
 
 
