@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from app.models.account import Account
-from app.schemas.accounts import AccountList, AccountPublic
+from app.schemas.accounts import AccountPublic, AccountList
 from app.backend.db import get_session
 
 router = APIRouter(prefix='/accounts')
