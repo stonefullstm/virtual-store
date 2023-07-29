@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from app.backend.db import create_db_and_tables
 
 from app.routes import accounts
@@ -15,6 +17,16 @@ app.add_middleware(
   allow_methods=['*'],
   allow_headers=['*'],
 )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+        request, exc):
+    # return PlainTextResponse(str(exc), status_code=400)
+    return JSONResponse(
+        status_code=400,
+        content={"message": str(exc)}
+    )
 
 
 @app.on_event("startup")
