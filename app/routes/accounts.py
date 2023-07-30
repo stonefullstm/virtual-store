@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.exc import NoResultFound
 from sqlmodel import Session, select
 
 from app.models.account import Account
@@ -47,3 +48,17 @@ def create_account(
     session.commit()
     session.refresh(account)
     return account
+
+
+@router.get('/{id}',
+            response_model=AccountPublic,
+            tags=["Accounts"])
+def get_account_by_id(
+    id: str,
+    session: Session = Depends(get_session)
+):
+    try:
+        result = session.exec(select(Account).where(Account.id == id)).one()
+    except NoResultFound:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return result

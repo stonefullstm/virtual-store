@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.exceptions import RequestValidationError
+from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
 from app.backend.db import create_db_and_tables
@@ -58,6 +58,14 @@ async def validation_exception_handler(
     return JSONResponse(
         status_code=400,
         content={"message": str(exc)}
+    )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={"message": "Item not found"}
     )
 
 
