@@ -62,10 +62,10 @@ async def validation_exception_handler(
 
 
 @app.exception_handler(HTTPException)
-async def http_exception_handler(request, exc):
+async def http_exception_handler(request, exc: HTTPException):
     return JSONResponse(
         status_code=404,
-        content={"message": "Item not found"}
+        content={"message": str(exc.detail)}
     )
 
 

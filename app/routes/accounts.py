@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.exc import NoResultFound
+# from sqlalchemy.exc import NoResultFound
 from sqlmodel import Session, select
 
 from app.models.account import Account
@@ -46,8 +46,7 @@ def get_account_by_id(
     id: str,
     session: Session = Depends(get_session)
 ):
-    try:
-        result = session.exec(select(Account).where(Account.id == id)).one()
-    except NoResultFound:
+    result = session.exec(select(Account).where(Account.id == id)).first()
+    if not result:
         raise HTTPException(status_code=404, detail="Account not found")
     return result
